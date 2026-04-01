@@ -4,665 +4,246 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Regulatory Watch — Vigilanza Bancaria & Normative EU</title>
-    <meta name="description" content="Aggregatore automatico di pubblicazioni dalle autorità di vigilanza bancaria europee e normative DORA, NIS2, AI Act.">
+    <meta name="description" content="Aggregatore automatico di pubblicazioni dalle autorità di vigilanza bancaria europee e normative DORA, NIS2, AI Act. Aggiornamento continuo.">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --bg: #f5f6f8;
-            --card-bg: #ffffff;
-            --text: #111827;
-            --text-secondary: #6b7280;
-            --accent: #1d4ed8;
-            --accent-light: #3b82f6;
-            --border: #e5e7eb;
-            --border-hover: #d1d5db;
-            --radius: 12px;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.07);
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --bg:#f5f6f8;--card:#fff;--text:#111827;--text2:#6b7280;
+            --accent:#1d4ed8;--accent-l:#3b82f6;--border:#e5e7eb;
+            --border-h:#d1d5db;--r:12px;
+            --sh:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+            --sh-md:0 4px 12px rgba(0,0,0,.07);
         }
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
+        /* Header */
+        .header{background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#1d4ed8 100%);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+        .header-top{padding:1.75rem 1.5rem .75rem;max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start}
+        .header h1{font-size:1.5rem;font-weight:700;letter-spacing:-.03em;display:flex;align-items:center;gap:.5rem}
+        .header h1 .icon{width:28px;height:28px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem}
+        .subtitle{font-size:.82rem;opacity:.75;font-weight:300;margin-top:.15rem}
+        .header-status{text-align:right;font-size:.72rem;opacity:.6;line-height:1.5}
+        .live-dot{display:inline-block;width:6px;height:6px;background:#34d399;border-radius:50%;margin-right:4px;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-        /* ---- Header ---- */
-        .header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1d4ed8 100%);
-            color: white;
-            padding: 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-        }
+        /* Range badge */
+        .range-badge{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:.2rem .5rem;font-size:.68rem;margin-top:.35rem;font-weight:400}
 
-        .header-top {
-            padding: 1.75rem 1.5rem 0.75rem;
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
+        /* Filter */
+        .filter-bar{max-width:900px;margin:0 auto;padding:.75rem 1.5rem .85rem;display:flex;gap:.4rem;flex-wrap:wrap;overflow-x:auto}
+        .filter-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:rgba(255,255,255,.85);padding:.3rem .7rem;border-radius:20px;font-size:.72rem;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit;white-space:nowrap}
+        .filter-btn:hover{background:rgba(255,255,255,.18);color:#fff}
+        .filter-btn.active{background:#fff;color:#0f172a;border-color:#fff;font-weight:600}
+        .filter-btn .ct{background:rgba(255,255,255,.15);padding:.1rem .35rem;border-radius:10px;font-size:.65rem;margin-left:.3rem}
+        .filter-btn.active .ct{background:rgba(0,0,0,.1)}
 
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        /* Stats */
+        .stats-bar{max-width:900px;margin:1rem auto 0;padding:0 1.5rem;display:flex;justify-content:space-between;align-items:center}
+        .stats-text{font-size:.78rem;color:var(--text2)}.stats-text strong{color:var(--text)}
+        .refresh-btn{font-family:inherit;font-size:.72rem;font-weight:500;color:var(--accent);background:none;border:1px solid var(--border);padding:.3rem .65rem;border-radius:6px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:.3rem}
+        .refresh-btn:hover{background:#eff6ff;border-color:var(--accent-l)}
+        .refresh-btn.loading{opacity:.5;pointer-events:none}
+        .refresh-btn .spinner{display:none;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite}
+        .refresh-btn.loading .spinner{display:inline-block}
+        .refresh-btn.loading .ri{display:none}
+        @keyframes spin{to{transform:rotate(360deg)}}
 
-        .header h1 .icon {
-            width: 28px;
-            height: 28px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-        }
+        /* News */
+        .container{max-width:900px;margin:.75rem auto 3rem;padding:0 1.5rem}
+        .date-group{margin-bottom:1.25rem}
+        .date-label{font-size:.72rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;padding:.6rem 0 .4rem;border-bottom:1px solid var(--border);margin-bottom:.5rem;position:sticky;top:120px;background:var(--bg);z-index:10}
+        .date-label .today{background:#dcfce7;color:#166534;font-size:.62rem;padding:.15rem .5rem;border-radius:10px;margin-left:.5rem;text-transform:none;letter-spacing:0;font-weight:600}
 
-        .header .subtitle {
-            font-size: 0.82rem;
-            opacity: 0.75;
-            font-weight: 300;
-            margin-top: 0.15rem;
-        }
+        .news-item{display:flex;gap:.85rem;padding:.9rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:.4rem;cursor:pointer;transition:all .15s;position:relative}
+        .news-item:hover{box-shadow:var(--sh-md);border-color:var(--border-h);transform:translateY(-1px)}
+        .news-item .dot{width:8px;height:8px;border-radius:50%;margin-top:.5rem;flex-shrink:0}
+        .news-body{flex:1;min-width:0}
+        .news-title{font-size:.9rem;font-weight:600;line-height:1.45}
+        .news-summary{font-size:.8rem;color:var(--text2);line-height:1.55;max-height:0;overflow:hidden;transition:max-height .3s,margin .3s}
+        .news-item.expanded .news-summary{max-height:250px;margin-top:.4rem}
+        .news-meta{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.4rem}
+        .tag{font-size:.65rem;font-weight:600;padding:.15rem .5rem;border-radius:4px}
+        .tag-bdi{background:#dbeafe;color:#1e40af}.tag-ecb{background:#fce7f3;color:#9d174d}
+        .tag-eba{background:#d1fae5;color:#065f46}.tag-esma{background:#fef3c7;color:#92400e}
+        .tag-dora{background:#ede9fe;color:#5b21b6}.tag-nis2{background:#fee2e2;color:#991b1b}
+        .tag-aiact{background:#f0fdf4;color:#166534}
+        .news-link{position:absolute;right:.85rem;top:50%;transform:translateY(-50%);color:var(--accent);opacity:0;transition:opacity .15s;font-size:.85rem;text-decoration:none;padding:.3rem}
+        .news-item:hover .news-link{opacity:1}
 
-        .header-status {
-            text-align: right;
-            font-size: 0.72rem;
-            opacity: 0.6;
-            line-height: 1.5;
-        }
+        /* New items highlight */
+        .news-item.is-new{border-left:3px solid #34d399}
 
-        .live-dot {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background: #34d399;
-            border-radius: 50%;
-            margin-right: 4px;
-            animation: pulse 2s infinite;
-        }
+        /* Skeleton */
+        .skeleton{background:linear-gradient(90deg,#eee 25%,#f5f5f5 50%,#eee 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
+        @keyframes shimmer{to{background-position:-200% 0}}
+        .sk-item{padding:1rem;border:1px solid var(--border);border-radius:var(--r);margin-bottom:.4rem}
+        .sk-line{height:14px;margin-bottom:.5rem}.sk-line.short{width:60%}.sk-line.tags{width:30%;height:20px}
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
+        .empty-state{text-align:center;padding:4rem 1rem;color:var(--text2)}
+        .empty-state svg{width:56px;height:56px;margin-bottom:1rem;opacity:.25}
+        .footer{text-align:center;padding:1.5rem;font-size:.72rem;color:var(--text2);border-top:1px solid var(--border);max-width:900px;margin:0 auto}
 
-        /* ---- Filter bar ---- */
-        .filter-bar {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0.75rem 1.5rem 0.85rem;
-            display: flex;
-            gap: 0.4rem;
-            flex-wrap: wrap;
-            align-items: center;
-            overflow-x: auto;
-        }
-
-        .filter-btn {
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.08);
-            color: rgba(255,255,255,0.85);
-            padding: 0.3rem 0.7rem;
-            border-radius: 20px;
-            font-size: 0.72rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.15s;
-            font-family: inherit;
-            white-space: nowrap;
-        }
-
-        .filter-btn:hover {
-            background: rgba(255,255,255,0.18);
-            color: white;
-        }
-
-        .filter-btn.active {
-            background: white;
-            color: #0f172a;
-            border-color: white;
-            font-weight: 600;
-        }
-
-        .filter-btn .count {
-            background: rgba(255,255,255,0.15);
-            padding: 0.1rem 0.35rem;
-            border-radius: 10px;
-            font-size: 0.65rem;
-            margin-left: 0.3rem;
-        }
-
-        .filter-btn.active .count {
-            background: rgba(0,0,0,0.1);
-        }
-
-        /* ---- Stats bar ---- */
-        .stats-bar {
-            max-width: 900px;
-            margin: 1rem auto 0;
-            padding: 0 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .stats-text {
-            font-size: 0.78rem;
-            color: var(--text-secondary);
-        }
-
-        .stats-text strong { color: var(--text); }
-
-        .refresh-btn {
-            font-family: inherit;
-            font-size: 0.72rem;
-            font-weight: 500;
-            color: var(--accent);
-            background: none;
-            border: 1px solid var(--border);
-            padding: 0.3rem 0.65rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .refresh-btn:hover {
-            background: #eff6ff;
-            border-color: var(--accent-light);
-        }
-
-        .refresh-btn.loading {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .refresh-btn .spinner {
-            display: none;
-            width: 12px;
-            height: 12px;
-            border: 2px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-        }
-
-        .refresh-btn.loading .spinner { display: inline-block; }
-        .refresh-btn.loading .refresh-icon { display: none; }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ---- News list ---- */
-        .container {
-            max-width: 900px;
-            margin: 0.75rem auto 3rem;
-            padding: 0 1.5rem;
-        }
-
-        .date-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .date-label {
-            font-size: 0.72rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-            padding: 0.6rem 0 0.4rem;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 0.5rem;
-            position: sticky;
-            top: 120px;
-            background: var(--bg);
-            z-index: 10;
-        }
-
-        .date-label .today-badge {
-            background: #dcfce7;
-            color: #166534;
-            font-size: 0.62rem;
-            padding: 0.15rem 0.5rem;
-            border-radius: 10px;
-            margin-left: 0.5rem;
-            text-transform: none;
-            letter-spacing: 0;
-            font-weight: 600;
-        }
-
-        .news-item {
-            display: flex;
-            gap: 0.85rem;
-            padding: 0.9rem 1rem;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            margin-bottom: 0.4rem;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            text-decoration: none;
-            color: inherit;
-            position: relative;
-        }
-
-        .news-item:hover {
-            box-shadow: var(--shadow-md);
-            border-color: var(--border-hover);
-            transform: translateY(-1px);
-        }
-
-        .news-item .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-top: 0.5rem;
-            flex-shrink: 0;
-        }
-
-        .news-body {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .news-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            line-height: 1.45;
-            color: var(--text);
-        }
-
-        .news-summary {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            line-height: 1.55;
-            margin-top: 0.3rem;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, margin 0.3s ease;
-        }
-
-        .news-item.expanded .news-summary {
-            max-height: 200px;
-            margin-top: 0.4rem;
-        }
-
-        .news-meta {
-            display: flex;
-            gap: 0.35rem;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-top: 0.4rem;
-        }
-
-        .tag {
-            font-size: 0.65rem;
-            font-weight: 600;
-            padding: 0.15rem 0.5rem;
-            border-radius: 4px;
-            letter-spacing: 0.01em;
-        }
-
-        .tag-bdi    { background: #dbeafe; color: #1e40af; }
-        .tag-ecb    { background: #fce7f3; color: #9d174d; }
-        .tag-eba    { background: #d1fae5; color: #065f46; }
-        .tag-esma   { background: #fef3c7; color: #92400e; }
-        .tag-dora   { background: #ede9fe; color: #5b21b6; }
-        .tag-nis2   { background: #fee2e2; color: #991b1b; }
-        .tag-aiact  { background: #f0fdf4; color: #166534; }
-
-        .news-link {
-            position: absolute;
-            right: 0.85rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--accent);
-            opacity: 0;
-            transition: opacity 0.15s;
-            font-size: 0.85rem;
-            text-decoration: none;
-            padding: 0.3rem;
-        }
-
-        .news-item:hover .news-link { opacity: 1; }
-
-        /* ---- Loading skeleton ---- */
-        .skeleton {
-            background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 8px;
-        }
-
-        @keyframes shimmer { to { background-position: -200% 0; } }
-
-        .skeleton-item {
-            padding: 1rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            margin-bottom: 0.4rem;
-        }
-
-        .skeleton-line {
-            height: 14px;
-            margin-bottom: 0.5rem;
-        }
-
-        .skeleton-line.short { width: 60%; }
-        .skeleton-line.tags { width: 30%; height: 20px; }
-
-        /* ---- Empty state ---- */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 1rem;
-            color: var(--text-secondary);
-        }
-
-        .empty-state svg {
-            width: 56px;
-            height: 56px;
-            margin-bottom: 1rem;
-            opacity: 0.25;
-        }
-
-        .empty-state p { font-size: 0.88rem; }
-
-        /* ---- Footer ---- */
-        .footer {
-            text-align: center;
-            padding: 1.5rem;
-            font-size: 0.72rem;
-            color: var(--text-secondary);
-            border-top: 1px solid var(--border);
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        /* ---- Responsive ---- */
-        @media (max-width: 640px) {
-            .header-top { padding: 1.25rem 1rem 0.5rem; flex-direction: column; gap: 0.5rem; }
-            .header h1 { font-size: 1.3rem; }
-            .filter-bar { padding: 0.6rem 1rem 0.75rem; }
-            .stats-bar, .container { padding: 0 1rem; }
-            .news-item { padding: 0.75rem 0.85rem; }
-            .news-title { font-size: 0.85rem; }
-            .date-label { top: 140px; }
+        @media(max-width:640px){
+            .header-top{padding:1.25rem 1rem .5rem;flex-direction:column;gap:.5rem}
+            .header h1{font-size:1.3rem}.filter-bar{padding:.6rem 1rem .75rem}
+            .stats-bar,.container{padding:0 1rem}
+            .news-item{padding:.75rem .85rem}.news-title{font-size:.85rem}
+            .date-label{top:145px}
         }
     </style>
 </head>
 <body>
 
-<!-- Header -->
 <header class="header">
     <div class="header-top">
         <div>
-            <h1>
-                <span class="icon">⚖</span>
-                Regulatory Watch
-            </h1>
-            <p class="subtitle">Vigilanza Bancaria & Normative EU — Aggiornamento automatico</p>
+            <h1><span class="icon">&#9878;</span> Regulatory Watch</h1>
+            <p class="subtitle">Vigilanza Bancaria & Normative EU — Aggiornamento automatico continuo</p>
+            <div class="range-badge" id="range-badge">1 Marzo 2026 → 1 Gennaio 2029</div>
         </div>
-        <div class="header-status" id="status-info">
+        <div class="header-status">
             <div><span class="live-dot"></span> Live</div>
             <div id="last-updated">Caricamento...</div>
+            <div id="next-refresh"></div>
         </div>
     </div>
-    <div class="filter-bar" id="filter-bar">
-        <!-- Populated by JS -->
-    </div>
+    <div class="filter-bar" id="filter-bar"></div>
 </header>
 
-<!-- Stats -->
 <div class="stats-bar">
-    <span class="stats-text">
-        <strong id="count">—</strong> pubblicazioni · <span id="date-range">1–30 Marzo 2026</span>
-    </span>
-    <button class="refresh-btn" id="refresh-btn" title="Aggiorna dati">
-        <span class="refresh-icon">↻</span>
-        <span class="spinner"></span>
-        Aggiorna
+    <span class="stats-text"><strong id="count">&mdash;</strong> pubblicazioni</span>
+    <button class="refresh-btn" id="refresh-btn" title="Forza aggiornamento da tutte le fonti">
+        <span class="ri">&#8635;</span><span class="spinner"></span> Aggiorna ora
     </button>
 </div>
 
-<!-- News container -->
 <div class="container" id="news-container">
-    <!-- Loading skeletons -->
-    <div id="loading-skeleton">
-        <div class="skeleton-item"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line short"></div><div class="skeleton skeleton-line tags"></div></div>
-        <div class="skeleton-item"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line short"></div><div class="skeleton skeleton-line tags"></div></div>
-        <div class="skeleton-item"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line short"></div><div class="skeleton skeleton-line tags"></div></div>
-        <div class="skeleton-item"><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line short"></div><div class="skeleton skeleton-line tags"></div></div>
+    <div id="loading">
+        <div class="sk-item"><div class="skeleton sk-line"></div><div class="skeleton sk-line short"></div><div class="skeleton sk-line tags"></div></div>
+        <div class="sk-item"><div class="skeleton sk-line"></div><div class="skeleton sk-line short"></div><div class="skeleton sk-line tags"></div></div>
+        <div class="sk-item"><div class="skeleton sk-line"></div><div class="skeleton sk-line short"></div><div class="skeleton sk-line tags"></div></div>
     </div>
 </div>
 
-<!-- Footer -->
 <div class="footer">
-    Fonti: Banca d'Italia · ECB/SSM · EBA · ESMA · EUR-Lex · DORA · NIS2 · AI Act<br>
-    Aggiornamento automatico ogni 30 minuti
+    Fonti: Banca d'Italia &middot; ECB/SSM &middot; EBA &middot; ESMA &middot; EUR-Lex &middot; Consiglio UE &middot; DORA &middot; NIS2 &middot; AI Act<br>
+    Aggiornamento automatico ogni 30 minuti &middot; Range: 1 Mar 2026 &rarr; 1 Gen 2029
 </div>
 
 <script>
-// =========================================================================
-// CONFIG
-// =========================================================================
-const API_BASE = "";  // Same origin
-const AUTO_REFRESH_MS = 5 * 60 * 1000; // Auto-refresh UI every 5 min
+const API = "";
+const POLL_MS = 3 * 60 * 1000;  // Poll API ogni 3 minuti
 
-const MONTHS_IT = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno",
-                   "Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
-const DAYS_IT = ["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"];
+const MI = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno",
+            "Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
+const DI = ["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"];
 
-const TAG_CONFIG = {
-    bdi:   { label: "Banca d'Italia", color: "#1e40af", dot: "#2563eb" },
-    ecb:   { label: "ECB / SSM",      color: "#9d174d", dot: "#db2777" },
-    eba:   { label: "EBA",            color: "#065f46", dot: "#059669" },
-    esma:  { label: "ESMA",           color: "#92400e", dot: "#d97706" },
-    dora:  { label: "DORA",           color: "#5b21b6", dot: "#7c3aed" },
-    nis2:  { label: "NIS2",           color: "#991b1b", dot: "#dc2626" },
-    aiact: { label: "AI Act",         color: "#166534", dot: "#16a34a" },
+const TC = {
+    bdi:   {label:"Banca d'Italia", dot:"#2563eb"},
+    ecb:   {label:"ECB / SSM",      dot:"#db2777"},
+    eba:   {label:"EBA",            dot:"#059669"},
+    esma:  {label:"ESMA",           dot:"#d97706"},
+    dora:  {label:"DORA",           dot:"#7c3aed"},
+    nis2:  {label:"NIS2",           dot:"#dc2626"},
+    aiact: {label:"AI Act",         dot:"#16a34a"},
 };
+const FO = ["all","bdi","ecb","eba","esma","dora","nis2","aiact"];
 
-const FILTER_ORDER = ["all", "bdi", "ecb", "eba", "esma", "dora", "nis2", "aiact"];
+let items = [], filter = "all", counts = {}, knownIds = new Set();
 
-// =========================================================================
-// STATE
-// =========================================================================
-let allItems = [];
-let currentFilter = "all";
-let tagCounts = {};
+function fmtDate(s){const d=new Date(s+"T12:00:00");return `${DI[d.getDay()]} ${d.getDate()} ${MI[d.getMonth()]} ${d.getFullYear()}`}
+function isToday(s){const t=new Date(),d=new Date(s+"T12:00:00");return d.getDate()===t.getDate()&&d.getMonth()===t.getMonth()&&d.getFullYear()===t.getFullYear()}
+function esc(s){if(!s)return"";const m={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"};return s.replace(/[&<>"']/g,c=>m[c])}
+function ago(iso){if(!iso)return"";const m=Math.floor((Date.now()-new Date(iso).getTime())/6e4);if(m<1)return"Appena aggiornato";if(m<60)return m+" min fa";const h=Math.floor(m/60);if(h<24)return h+"h fa";return Math.floor(h/24)+"g fa"}
 
-// =========================================================================
-// HELPERS
-// =========================================================================
-function formatDate(dateStr) {
-    const d = new Date(dateStr + "T12:00:00");
-    return `${DAYS_IT[d.getDay()]} ${d.getDate()} ${MONTHS_IT[d.getMonth()]} ${d.getFullYear()}`;
-}
+async function load(){
+    try{
+        const r=await fetch(API+"/api/news");
+        if(!r.ok)throw new Error(r.status);
+        const d=await r.json();
+        const prev=new Set(knownIds);
+        items=d.items||[];
+        knownIds=new Set(items.map(i=>i.id));
 
-function isToday(dateStr) {
-    const today = new Date();
-    const d = new Date(dateStr + "T12:00:00");
-    return d.getDate() === today.getDate() &&
-           d.getMonth() === today.getMonth() &&
-           d.getFullYear() === today.getFullYear();
-}
+        // Detect new items
+        items.forEach(i=>{i._isNew=prev.size>0&&!prev.has(i.id)});
 
-function timeAgo(isoStr) {
-    if (!isoStr) return "";
-    const diff = Date.now() - new Date(isoStr).getTime();
-    const mins = Math.floor(diff / 60000);
-    if (mins < 1) return "Appena aggiornato";
-    if (mins < 60) return `${mins} min fa`;
-    const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return `${hrs}h fa`;
-    return `${Math.floor(hrs / 24)}g fa`;
-}
+        document.getElementById("last-updated").textContent="Agg. "+ago(d.last_updated);
 
-// =========================================================================
-// DATA FETCHING
-// =========================================================================
-async function fetchNews() {
-    try {
-        const res = await fetch(`${API_BASE}/api/news`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        allItems = data.items || [];
-
-        // Update status
-        document.getElementById("last-updated").textContent =
-            `Agg. ${timeAgo(data.last_updated)}`;
-
-        // Compute tag counts
-        tagCounts = { all: allItems.length };
-        allItems.forEach(item => {
-            (item.tags || []).forEach(tag => {
-                tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-            });
-        });
-
-        renderFilters();
-        renderNews();
-    } catch (err) {
-        console.error("Fetch failed:", err);
-        document.getElementById("loading-skeleton").innerHTML =
-            `<div class="empty-state"><p>Errore nel caricamento dei dati.<br>Controlla che il server sia attivo.</p></div>`;
-    }
-}
-
-async function triggerRefresh() {
-    const btn = document.getElementById("refresh-btn");
-    btn.classList.add("loading");
-    try {
-        const res = await fetch(`${API_BASE}/api/refresh`, { method: "POST" });
-        if (res.ok) {
-            await fetchNews();
+        if(d.date_range){
+            const s=new Date(d.date_range.start+"T12:00:00");
+            const e=new Date(d.date_range.end+"T12:00:00");
+            document.getElementById("range-badge").textContent=
+                `${s.getDate()} ${MI[s.getMonth()]} ${s.getFullYear()} → ${e.getDate()} ${MI[e.getMonth()]} ${e.getFullYear()}`;
         }
-    } catch (err) {
-        console.error("Refresh failed:", err);
-    } finally {
-        btn.classList.remove("loading");
+
+        counts={all:items.length};
+        items.forEach(i=>(i.tags||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
+        renderFilters();renderNews();
+    }catch(e){
+        console.error("Load failed:",e);
+        document.getElementById("loading").innerHTML='<div class="empty-state"><p>Errore nel caricamento. Verifica che il server sia attivo.</p></div>';
     }
 }
 
-// =========================================================================
-// RENDERING
-// =========================================================================
-function renderFilters() {
-    const bar = document.getElementById("filter-bar");
-    bar.innerHTML = FILTER_ORDER.map(f => {
-        const label = f === "all" ? "Tutte" : TAG_CONFIG[f]?.label || f;
-        const count = tagCounts[f] || 0;
-        const active = f === currentFilter ? "active" : "";
-        return `<button class="filter-btn ${active}" data-filter="${f}">
-                    ${label}<span class="count">${count}</span>
-                </button>`;
+async function doRefresh(){
+    const b=document.getElementById("refresh-btn");
+    b.classList.add("loading");
+    try{const r=await fetch(API+"/api/refresh",{method:"POST"});if(r.ok)await load()}
+    catch(e){console.error(e)}
+    finally{b.classList.remove("loading")}
+}
+
+function renderFilters(){
+    const bar=document.getElementById("filter-bar");
+    bar.innerHTML=FO.map(f=>{
+        const l=f==="all"?"Tutte":TC[f]?.label||f;
+        const c=counts[f]||0;
+        return `<button class="filter-btn ${f===filter?"active":""}" data-f="${f}">${l}<span class="ct">${c}</span></button>`;
     }).join("");
-
-    bar.querySelectorAll(".filter-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            currentFilter = btn.dataset.filter;
-            renderFilters();
-            renderNews();
-        });
-    });
+    bar.querySelectorAll(".filter-btn").forEach(b=>b.onclick=()=>{filter=b.dataset.f;renderFilters();renderNews()});
 }
 
-function renderNews() {
-    const container = document.getElementById("news-container");
-    const countEl = document.getElementById("count");
+function renderNews(){
+    const c=document.getElementById("news-container");
+    document.getElementById("count").textContent=0;
+    const fl=filter==="all"?items:items.filter(i=>i.tags?.includes(filter));
+    document.getElementById("count").textContent=fl.length;
 
-    const filtered = currentFilter === "all"
-        ? allItems
-        : allItems.filter(item => item.tags?.includes(currentFilter));
+    if(!fl.length){c.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg><p>Nessuna pubblicazione per questo filtro.</p></div>';return}
 
-    countEl.textContent = filtered.length;
+    const g={};fl.forEach(i=>{const d=i.date||"N/D";(g[d]=g[d]||[]).push(i)});
+    const dates=Object.keys(g).sort((a,b)=>b.localeCompare(a));
 
-    if (filtered.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
-                </svg>
-                <p>Nessuna pubblicazione trovata per questo filtro.</p>
+    let h="";
+    dates.forEach(d=>{
+        const today=isToday(d)?'<span class="today">OGGI</span>':"";
+        const label=d==="N/D"?d:fmtDate(d);
+        h+=`<div class="date-group"><div class="date-label">${label}${today}</div>`;
+        g[d].forEach(i=>{
+            const pt=i.source||i.tags?.[0]||"bdi";
+            const dc=TC[pt]?.dot||"#6b7280";
+            const tags=(i.tags||[]).map(t=>`<span class="tag tag-${t}">${TC[t]?.label||t}</span>`).join("");
+            const newCls=i._isNew?" is-new":"";
+            h+=`<div class="news-item${newCls}" onclick="this.classList.toggle('expanded')">
+                <div class="dot" style="background:${dc}"></div>
+                <div class="news-body">
+                    <div class="news-title">${esc(i.title)}</div>
+                    ${i.summary?`<div class="news-summary">${esc(i.summary)}</div>`:""}
+                    <div class="news-meta">${tags}</div>
+                </div>
+                <a class="news-link" href="${esc(i.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Apri fonte">&#8599;</a>
             </div>`;
-        return;
-    }
-
-    // Group by date
-    const groups = {};
-    filtered.forEach(item => {
-        const d = item.date || "Senza data";
-        if (!groups[d]) groups[d] = [];
-        groups[d].push(item);
-    });
-
-    const sortedDates = Object.keys(groups).sort((a, b) => b.localeCompare(a));
-
-    let html = "";
-    sortedDates.forEach(date => {
-        const todayBadge = isToday(date)
-            ? `<span class="today-badge">OGGI</span>` : "";
-        const label = date === "Senza data" ? date : formatDate(date);
-
-        html += `<div class="date-group">
-                    <div class="date-label">${label}${todayBadge}</div>`;
-
-        groups[date].forEach(item => {
-            const primaryTag = item.source || item.tags?.[0] || "bdi";
-            const dotColor = TAG_CONFIG[primaryTag]?.dot || "#6b7280";
-            const tagsHtml = (item.tags || [])
-                .map(t => `<span class="tag tag-${t}">${TAG_CONFIG[t]?.label || t}</span>`)
-                .join("");
-
-            html += `
-                <div class="news-item" onclick="this.classList.toggle('expanded')">
-                    <div class="dot" style="background:${dotColor}"></div>
-                    <div class="news-body">
-                        <div class="news-title">${escapeHtml(item.title)}</div>
-                        ${item.summary ? `<div class="news-summary">${escapeHtml(item.summary)}</div>` : ""}
-                        <div class="news-meta">${tagsHtml}</div>
-                    </div>
-                    <a class="news-link" href="${escapeHtml(item.url)}" target="_blank"
-                       rel="noopener" onclick="event.stopPropagation()" title="Apri fonte">↗</a>
-                </div>`;
         });
-
-        html += `</div>`;
+        h+="</div>";
     });
-
-    container.innerHTML = html;
+    c.innerHTML=h;
 }
 
-function escapeHtml(str) {
-    if (!str) return "";
-    const map = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" };
-    return str.replace(/[&<>"']/g, c => map[c]);
-}
-
-// =========================================================================
-// INIT
-// =========================================================================
-document.getElementById("refresh-btn").addEventListener("click", triggerRefresh);
-fetchNews();
-setInterval(fetchNews, AUTO_REFRESH_MS);
+document.getElementById("refresh-btn").onclick=doRefresh;
+load();
+setInterval(load, POLL_MS);
 </script>
-
 </body>
 </html>

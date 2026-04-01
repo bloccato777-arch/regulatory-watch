@@ -1,0 +1,275 @@
+{
+  "last_updated": "2026-04-01T13:25:33.956175+00:00",
+  "count": 20,
+  "date_range": {
+    "start": "2026-03-01",
+    "end": "2029-01-01"
+  },
+  "items": [
+    {
+      "id": "seed01",
+      "date": "2026-03-30",
+      "title": "ECB semplifica la supervisione sui modelli interni delle banche",
+      "summary": "La BCE snellisce il processo di valutazione delle modifiche ai modelli interni per il rischio di credito.",
+      "source": "ecb",
+      "sourceLabel": "ECB / SSM",
+      "tags": [
+        "ecb"
+      ],
+      "url": "https://www.bankingsupervision.europa.eu/press/pr/date/2026/html/index.en.html",
+      "_manual": true
+    },
+    {
+      "id": "seed02",
+      "date": "2026-03-27",
+      "title": "Banca d'Italia: Banche e istituzioni finanziarie — articolazione territoriale 2025",
+      "summary": "Statistica annuale sull'articolazione territoriale di banche e istituzioni finanziarie in Italia.",
+      "source": "bdi",
+      "sourceLabel": "Banca d'Italia",
+      "tags": [
+        "bdi"
+      ],
+      "url": "https://www.bancaditalia.it/media/notizia/banche-e-istituzioni-finanziarie-2025/",
+      "_manual": true
+    },
+    {
+      "id": "seed03",
+      "date": "2026-03-27",
+      "title": "Banca d'Italia dispone affiancamento commissariale per BFF Bank",
+      "summary": "Nomina di due commissari in temporaneo affiancamento al consiglio di amministrazione di BFF Bank.",
+      "source": "bdi",
+      "sourceLabel": "Banca d'Italia",
+      "tags": [
+        "bdi"
+      ],
+      "url": "https://www.bancaditalia.it/media/comunicati/index.html",
+      "_manual": true
+    },
+    {
+      "id": "seed04",
+      "date": "2026-03-27",
+      "title": "ESAs: rinvio del reporting settimanale sulle posizioni in derivati su materie prime",
+      "summary": "Le Autorità di Vigilanza Europee annunciano il posticipo dell'avvio del reporting settimanale.",
+      "source": "esma",
+      "sourceLabel": "ESMA / ESAs",
+      "tags": [
+        "esma",
+        "eba"
+      ],
+      "url": "https://www.esma.europa.eu/press-news/esma-news",
+      "_manual": true
+    },
+    {
+      "id": "seed05",
+      "date": "2026-03-24",
+      "title": "ECB: la supervisione bancaria in un mercato del credito frammentato",
+      "summary": "Intervista della BCE sulle interconnessioni nel mercato del credito e l'importanza della supervisione.",
+      "source": "ecb",
+      "sourceLabel": "ECB / SSM",
+      "tags": [
+        "ecb"
+      ],
+      "url": "https://www.bankingsupervision.europa.eu/press/interviews/date/2026/html/index.en.html",
+      "_manual": true
+    },
+    {
+      "id": "seed06",
+      "date": "2026-03-22",
+      "title": "DORA: scadenza per la presentazione del Register of Information (RoI)",
+      "summary": "Scadenza per la consegna del Registro delle Informazioni ai sensi di DORA.",
+      "source": "dora",
+      "sourceLabel": "DORA",
+      "tags": [
+        "dora",
+        "eba"
+      ],
+      "url": "https://www.digital-operational-resilience-act.com/",
+      "_manual": true
+    },
+    {
+      "id": "seed07",
+      "date": "2026-03-18",
+      "title": "ECB pubblica le statistiche di vigilanza bancaria — Q4 2025",
+      "summary": "CET1 ratio al 16,18%. NPL ratio scende al 2,18%, livello più basso dalla prima pubblicazione.",
+      "source": "ecb",
+      "sourceLabel": "ECB / SSM",
+      "tags": [
+        "ecb"
+      ],
+      "url": "https://www.bankingsupervision.europa.eu/press/pr/date/2026/html/index.en.html",
+      "_manual": true
+    },
+    {
+      "id": "seed08",
+      "date": "2026-03-18",
+      "title": "ECB pubblica il Rapporto Annuale sulle attività di vigilanza 2025",
+      "summary": "Il rapporto annuale descrive le attività di vigilanza bancaria svolte nel 2025 nell'ambito dell'SSM.",
+      "source": "ecb",
+      "sourceLabel": "ECB / SSM",
+      "tags": [
+        "ecb"
+      ],
+      "url": "https://www.bankingsupervision.europa.eu/press/other-publications/annual-report/html/all-releases.en.html",
+      "_manual": true
+    },
+    {
+      "id": "seed09",
+      "date": "2026-03-17",
+      "title": "EBA pubblica il secondo Impact Assessment Report sul MREL",
+      "summary": "Valutazione d'impatto sul requisito minimo di fondi propri e passività ammissibili (MREL).",
+      "source": "eba",
+      "sourceLabel": "EBA",
+      "tags": [
+        "eba"
+      ],
+      "url": "https://www.eba.europa.eu/publications-and-media/publications",
+      "_manual": true
+    },
+    {
+      "id": "seed10",
+      "date": "2026-03-17",
+      "title": "ESAs pubblicano l'aggiornamento Spring 2026 sui rischi nel sistema finanziario UE",
+      "summary": "Aggiornamento congiunto su rischi e vulnerabilità: tensioni geopolitiche e finanza privata.",
+      "source": "eba",
+      "sourceLabel": "EBA / ESAs",
+      "tags": [
+        "eba",
+        "esma"
+      ],
+      "url": "https://www.eba.europa.eu/publications-and-media/press-releases",
+      "_manual": true
+    },
+    {
+      "id": "seed11",
+      "date": "2026-03-13",
+      "title": "Banca d'Italia pubblica le Disposizioni consolidate antiriciclaggio",
+      "summary": "Versione consolidata delle Disposizioni in materia antiriciclaggio.",
+      "source": "bdi",
+      "sourceLabel": "Banca d'Italia",
+      "tags": [
+        "bdi"
+      ],
+      "url": "https://www.bancaditalia.it/compiti/supervisione-normativa-antiriciclaggio/",
+      "_manual": true
+    },
+    {
+      "id": "seed12",
+      "date": "2026-03-13",
+      "title": "Consiglio UE: posizione comune per semplificare le regole sull'Intelligenza Artificiale",
+      "summary": "Posizione del Consiglio nell'ambito del pacchetto Omnibus VII per semplificare il framework AI Act.",
+      "source": "aiact",
+      "sourceLabel": "AI Act",
+      "tags": [
+        "aiact"
+      ],
+      "url": "https://www.consilium.europa.eu/en/press/press-releases/2026/03/13/",
+      "_manual": true
+    },
+    {
+      "id": "seed13",
+      "date": "2026-03-11",
+      "title": "ESMA: i mercati UE restano ad alto rischio — aggiornamento TRV Spring 2026",
+      "summary": "Tre fattori chiave: geopolitica, valutazioni elevate e minacce cyber/ibride.",
+      "source": "esma",
+      "sourceLabel": "ESMA",
+      "tags": [
+        "esma"
+      ],
+      "url": "https://www.esma.europa.eu/press-news/esma-news",
+      "_manual": true
+    },
+    {
+      "id": "seed14",
+      "date": "2026-03-10",
+      "title": "L'economia italiana in breve, n. 3 — Marzo 2026",
+      "summary": "Statistiche sugli andamenti economici del sistema finanziario italiano.",
+      "source": "bdi",
+      "sourceLabel": "Banca d'Italia",
+      "tags": [
+        "bdi"
+      ],
+      "url": "https://www.bancaditalia.it/media/notizia/l-economia-italiana-in-breve-n-3-marzo-2026/",
+      "_manual": true
+    },
+    {
+      "id": "seed15",
+      "date": "2026-03-06",
+      "title": "NIS2: scadenza registrazione BSI per le aziende tedesche",
+      "summary": "Scadenza registrazione BSI per le 29.500 aziende soggette NIS2 in Germania.",
+      "source": "nis2",
+      "sourceLabel": "NIS2",
+      "tags": [
+        "nis2"
+      ],
+      "url": "https://www.nis-2-directive.com/",
+      "_manual": true
+    },
+    {
+      "id": "seed16",
+      "date": "2026-03-03",
+      "title": "AI Act: seconda bozza del Codice di Pratica sulla marcatura dei contenuti generati da AI",
+      "summary": "Codice di Pratica volontario sulla marcatura ed etichettatura dei contenuti generati dall'IA.",
+      "source": "aiact",
+      "sourceLabel": "AI Act",
+      "tags": [
+        "aiact"
+      ],
+      "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+      "_manual": true
+    },
+    {
+      "id": "seed17",
+      "date": "2026-03-01",
+      "title": "EBA avvia la validazione centralizzata dell'ISDA SIMM nell'UE",
+      "summary": "Avvio della funzione di validazione centralizzata del modello ISDA SIMM.",
+      "source": "eba",
+      "sourceLabel": "EBA",
+      "tags": [
+        "eba"
+      ],
+      "url": "https://www.eba.europa.eu/publications-and-media/press-releases/eba-kicks-eu-central-validation-isda-simm-1-march-2026",
+      "_manual": true
+    },
+    {
+      "id": "seed18",
+      "date": "2026-03-01",
+      "title": "DORA: passaggio alla fase di enforcement attivo",
+      "summary": "Dopo il 2025 come transizione, DORA entra nella fase di enforcement attivo nel 2026.",
+      "source": "dora",
+      "sourceLabel": "DORA",
+      "tags": [
+        "dora"
+      ],
+      "url": "https://www.digital-operational-resilience-act.com/",
+      "_manual": true
+    },
+    {
+      "id": "seed19",
+      "date": "2026-03-01",
+      "title": "ESAs pubblicano la lista dei Critical ICT Third-Party Providers (CTPPs) ai sensi di DORA",
+      "summary": "Prima lista ufficiale dei fornitori ICT critici designati.",
+      "source": "dora",
+      "sourceLabel": "DORA / ESAs",
+      "tags": [
+        "dora",
+        "eba",
+        "esma"
+      ],
+      "url": "https://www.digital-operational-resilience-act.com/",
+      "_manual": true
+    },
+    {
+      "id": "seed20",
+      "date": "2026-03-01",
+      "title": "EBA consulta sugli standard tecnici per requisiti prudenziali dei CSD",
+      "summary": "Consultazione modifiche standard tecnici per depositari centrali di titoli.",
+      "source": "eba",
+      "sourceLabel": "EBA",
+      "tags": [
+        "eba"
+      ],
+      "url": "https://www.eba.europa.eu/publications-and-media/press-releases",
+      "_manual": true
+    }
+  ]
+}
