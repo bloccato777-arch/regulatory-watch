@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Regulatory Watch — Vigilanza Bancaria & Normative EU</title>
-    <meta name="description" content="Aggregatore automatico di pubblicazioni dalle autorità di vigilanza bancaria europee e normative DORA, NIS2, AI Act. Aggiornamento continuo.">
+    <meta name="description" content="Aggregatore automatico di pubblicazioni dalle autorità di vigilanza bancaria europea e normative DORA, NIS2, AI Act. Aggiornamento continuo.">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -38,6 +38,23 @@
         .filter-btn .ct{background:rgba(255,255,255,.15);padding:.1rem .35rem;border-radius:10px;font-size:.65rem;margin-left:.3rem}
         .filter-btn.active .ct{background:rgba(0,0,0,.1)}
 
+        /* Date range picker */
+        .date-range-bar{max-width:900px;margin:0 auto;padding:.55rem 1.5rem .65rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.1)}
+        .date-range-bar label{font-size:.72rem;color:rgba(255,255,255,.75);font-weight:500;white-space:nowrap}
+        .date-input{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:.3rem .6rem;border-radius:6px;font-size:.72rem;font-family:inherit;cursor:pointer;outline:none;transition:all .15s}
+        .date-input::placeholder{color:rgba(255,255,255,.4)}
+        .date-input::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.7;cursor:pointer}
+        .date-input:focus{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.45)}
+        .date-sep{color:rgba(255,255,255,.5);font-size:.75rem;margin:0 .15rem}
+        .date-reset{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);padding:.3rem .65rem;border-radius:6px;font-size:.7rem;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap}
+        .date-reset:hover{background:rgba(255,255,255,.15);color:#fff}
+        .preset-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:.3rem .65rem;border-radius:6px;font-size:.7rem;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap}
+        .preset-btn:hover{background:rgba(255,255,255,.18);color:#fff}
+        .preset-btn.active{background:rgba(255,255,255,.3);border-color:rgba(255,255,255,.5);color:#fff;font-weight:600}
+        .preset-sep{width:1px;height:18px;background:rgba(255,255,255,.15);flex-shrink:0}
+        .date-badge{background:#fbbf24;color:#78350f;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:10px;display:none;margin-left:.3rem}
+        .date-badge.show{display:inline-block}
+
         /* Stats */
         .stats-bar{max-width:900px;margin:1rem auto 0;padding:0 1.5rem;display:flex;justify-content:space-between;align-items:center}
         .stats-text{font-size:.78rem;color:var(--text2)}.stats-text strong{color:var(--text)}
@@ -52,7 +69,7 @@
         /* News */
         .container{max-width:900px;margin:.75rem auto 3rem;padding:0 1.5rem}
         .date-group{margin-bottom:1.25rem}
-        .date-label{font-size:.72rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;padding:.6rem 0 .4rem;border-bottom:1px solid var(--border);margin-bottom:.5rem;position:sticky;top:120px;background:var(--bg);z-index:10}
+        .date-label{font-size:.72rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;padding:.6rem 0 .4rem;border-bottom:1px solid var(--border);margin-bottom:.5rem;position:sticky;top:165px;background:var(--bg);z-index:10}
         .date-label .today{background:#dcfce7;color:#166534;font-size:.62rem;padding:.15rem .5rem;border-radius:10px;margin-left:.5rem;text-transform:none;letter-spacing:0;font-weight:600}
 
         .news-item{display:flex;gap:.85rem;padding:.9rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:.4rem;cursor:pointer;transition:all .15s;position:relative}
@@ -86,10 +103,12 @@
 
         @media(max-width:640px){
             .header-top{padding:1.25rem 1rem .5rem;flex-direction:column;gap:.5rem}
-            .header h1{font-size:1.3rem}.filter-bar{padding:.6rem 1rem .75rem}
+            .header h1{font-size:1.3rem}
+            .filter-bar{padding:.6rem 1rem .75rem}
+            .date-range-bar{padding:.4rem 1rem .5rem;gap:.4rem}
             .stats-bar,.container{padding:0 1rem}
             .news-item{padding:.75rem .85rem}.news-title{font-size:.85rem}
-            .date-label{top:145px}
+            .date-label{top:185px}
         }
     </style>
 </head>
@@ -98,23 +117,34 @@
 <header class="header">
     <div class="header-top">
         <div>
-            <h1><span class="icon">&#9878;</span> Regulatory Watch</h1>
+            <h1><span class="icon">⚖️</span> Regulatory Watch</h1>
             <p class="subtitle">Vigilanza Bancaria & Normative EU — Aggiornamento automatico continuo</p>
             <div class="range-badge" id="range-badge">1 Marzo 2026 → 1 Gennaio 2029</div>
         </div>
         <div class="header-status">
             <div><span class="live-dot"></span> Live</div>
             <div id="last-updated">Caricamento...</div>
-            <div id="next-refresh"></div>
         </div>
     </div>
     <div class="filter-bar" id="filter-bar"></div>
+    <div class="date-range-bar">
+        <label>📅 Periodo:</label>
+        <button class="preset-btn" data-preset="7">Ultimi 7 giorni</button>
+        <button class="preset-btn" data-preset="30">Ultimi 30 giorni</button>
+        <button class="preset-btn" data-preset="90">Ultimi 90 giorni</button>
+        <div class="preset-sep"></div>
+        <input type="date" class="date-input" id="date-from" placeholder="Da">
+        <span class="date-sep">→</span>
+        <input type="date" class="date-input" id="date-to" placeholder="A">
+        <button class="date-reset" id="date-reset">✕ Reset</button>
+        <span class="date-badge" id="date-badge">Filtro attivo</span>
+    </div>
 </header>
 
 <div class="stats-bar">
-    <span class="stats-text"><strong id="count">&mdash;</strong> pubblicazioni</span>
-    <button class="refresh-btn" id="refresh-btn" title="Forza aggiornamento da tutte le fonti">
-        <span class="ri">&#8635;</span><span class="spinner"></span> Aggiorna ora
+    <span class="stats-text"><strong id="count">—</strong> pubblicazioni</span>
+    <button class="refresh-btn" id="refresh-btn" title="Forza aggiornamento">
+        <span class="ri">↻</span><span class="spinner"></span> Aggiorna
     </button>
 </div>
 
@@ -127,13 +157,13 @@
 </div>
 
 <div class="footer">
-    Fonti: Banca d'Italia &middot; ECB/SSM &middot; EBA &middot; ESMA &middot; EUR-Lex &middot; Consiglio UE &middot; DORA &middot; NIS2 &middot; AI Act<br>
-    Aggiornamento automatico ogni 30 minuti &middot; Range: 1 Mar 2026 &rarr; 1 Gen 2029
+    Fonti: Banca d'Italia · ECB/SSM · EBA · ESMA · EUR-Lex · Consiglio UE · DORA · NIS2 · AI Act<br>
+    Aggiornamento automatico ogni 30 minuti · Range: 1 Mar 2026 → 1 Gen 2029
 </div>
 
 <script>
 const API = "";
-const POLL_MS = 3 * 60 * 1000;  // Poll API ogni 3 minuti
+const POLL_MS = 3 * 60 * 1000;
 
 const MI = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno",
             "Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
@@ -151,11 +181,19 @@ const TC = {
 const FO = ["all","bdi","ecb","eba","esma","dora","nis2","aiact"];
 
 let items = [], filter = "all", counts = {}, knownIds = new Set();
+let dateFrom = "", dateTo = "";
 
 function fmtDate(s){const d=new Date(s+"T12:00:00");return `${DI[d.getDay()]} ${d.getDate()} ${MI[d.getMonth()]} ${d.getFullYear()}`}
 function isToday(s){const t=new Date(),d=new Date(s+"T12:00:00");return d.getDate()===t.getDate()&&d.getMonth()===t.getMonth()&&d.getFullYear()===t.getFullYear()}
 function esc(s){if(!s)return"";const m={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"};return s.replace(/[&<>"']/g,c=>m[c])}
 function ago(iso){if(!iso)return"";const m=Math.floor((Date.now()-new Date(iso).getTime())/6e4);if(m<1)return"Appena aggiornato";if(m<60)return m+" min fa";const h=Math.floor(m/60);if(h<24)return h+"h fa";return Math.floor(h/24)+"g fa"}
+
+function isInDateRange(date){
+    if(!dateFrom&&!dateTo)return true;
+    if(dateFrom&&date<dateFrom)return false;
+    if(dateTo&&date>dateTo)return false;
+    return true;
+}
 
 async function load(){
     try{
@@ -165,19 +203,14 @@ async function load(){
         const prev=new Set(knownIds);
         items=d.items||[];
         knownIds=new Set(items.map(i=>i.id));
-
-        // Detect new items
         items.forEach(i=>{i._isNew=prev.size>0&&!prev.has(i.id)});
-
         document.getElementById("last-updated").textContent="Agg. "+ago(d.last_updated);
-
         if(d.date_range){
             const s=new Date(d.date_range.start+"T12:00:00");
             const e=new Date(d.date_range.end+"T12:00:00");
             document.getElementById("range-badge").textContent=
                 `${s.getDate()} ${MI[s.getMonth()]} ${s.getFullYear()} → ${e.getDate()} ${MI[e.getMonth()]} ${e.getFullYear()}`;
         }
-
         counts={all:items.length};
         items.forEach(i=>(i.tags||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
         renderFilters();renderNews();
@@ -208,10 +241,11 @@ function renderFilters(){
 function renderNews(){
     const c=document.getElementById("news-container");
     document.getElementById("count").textContent=0;
-    const fl=filter==="all"?items:items.filter(i=>i.tags?.includes(filter));
+    let fl=filter==="all"?items:items.filter(i=>i.tags?.includes(filter));
+    fl=fl.filter(i=>isInDateRange(i.date));
     document.getElementById("count").textContent=fl.length;
 
-    if(!fl.length){c.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg><p>Nessuna pubblicazione per questo filtro.</p></div>';return}
+    if(!fl.length){c.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg><p>Nessuna pubblicazione nel periodo selezionato.</p></div>';return}
 
     const g={};fl.forEach(i=>{const d=i.date||"N/D";(g[d]=g[d]||[]).push(i)});
     const dates=Object.keys(g).sort((a,b)=>b.localeCompare(a));
@@ -233,7 +267,7 @@ function renderNews(){
                     ${i.summary?`<div class="news-summary">${esc(i.summary)}</div>`:""}
                     <div class="news-meta">${tags}</div>
                 </div>
-                <a class="news-link" href="${esc(i.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Apri fonte">&#8599;</a>
+                <a class="news-link" href="${esc(i.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Apri fonte">↗</a>
             </div>`;
         });
         h+="</div>";
@@ -241,7 +275,38 @@ function renderNews(){
     c.innerHTML=h;
 }
 
+function updateDateBadge(){
+    const badge=document.getElementById("date-badge");
+    if(dateFrom||dateTo){
+        badge.classList.add("show");
+    }else{
+        badge.classList.remove("show");
+    }
+}
+
+function setPreset(days){
+    const today=new Date();
+    const from=new Date(today.getTime()-days*24*60*60*1000);
+    dateTo=today.toISOString().split('T')[0];
+    dateFrom=from.toISOString().split('T')[0];
+    document.getElementById("date-from").value=dateFrom;
+    document.getElementById("date-to").value=dateTo;
+    updateDateBadge();
+    renderNews();
+}
+
 document.getElementById("refresh-btn").onclick=doRefresh;
+document.getElementById("date-from").oninput=()=>{dateFrom=document.getElementById("date-from").value;updateDateBadge();renderNews()};
+document.getElementById("date-to").oninput=()=>{dateTo=document.getElementById("date-to").value;updateDateBadge();renderNews()};
+document.getElementById("date-reset").onclick=()=>{dateFrom="";dateTo="";document.getElementById("date-from").value="";document.getElementById("date-to").value="";updateDateBadge();renderNews()};
+document.querySelectorAll(".preset-btn").forEach(b=>{
+    b.onclick=()=>{
+        const preset=parseInt(b.dataset.preset);
+        setPreset(preset);
+        document.querySelectorAll(".preset-btn").forEach(x=>x.classList.remove("active"));
+        b.classList.add("active");
+    }
+});
 load();
 setInterval(load, POLL_MS);
 </script>
