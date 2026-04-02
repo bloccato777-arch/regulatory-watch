@@ -824,7 +824,9 @@ def start_scheduler():
 # Main
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
-    seed_initial_data()
+    # Refresh subito al startup
+    refresh_data()
+    # Poi avvia lo scheduler
     start_scheduler()
     port = int(os.getenv("PORT", "5000"))
     app.run(host="0.0.0.0", port=port, debug=False)
