@@ -205,12 +205,7 @@ async function load(){
         knownIds=new Set(items.map(i=>i.id));
         items.forEach(i=>{i._isNew=prev.size>0&&!prev.has(i.id)});
         document.getElementById("last-updated").textContent="Agg. "+ago(d.last_updated);
-        if(d.date_range){
-            const s=new Date(d.date_range.start+"T12:00:00");
-            const e=new Date(d.date_range.end+"T12:00:00");
-            document.getElementById("range-badge").textContent=
-                `${s.getDate()} ${MI[s.getMonth()]} ${s.getFullYear()} → ${e.getDate()} ${MI[e.getMonth()]} ${e.getFullYear()}`;
-        }
+        // range-badge removed - no longer needed
         counts={all:items.length};
         items.forEach(i=>(i.tags||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
         
