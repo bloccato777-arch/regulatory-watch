@@ -84,6 +84,7 @@
         .empty-state svg{width:56px;height:56px;margin-bottom:1rem;opacity:.25}
         .footer{text-align:center;padding:1.5rem;font-size:.72rem;color:var(--text2);border-top:1px solid var(--border);max-width:900px;margin:0 auto}
 
+<<<<<<< HEAD
         /* Date range picker */
         .date-range-bar{max-width:900px;margin:0 auto;padding:.5rem 1.5rem .6rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.1)}
         .date-range-bar label{font-size:.72rem;color:rgba(255,255,255,.7);font-weight:500;white-space:nowrap}
@@ -95,6 +96,10 @@
         .date-reset:hover{background:rgba(255,255,255,.15);color:#fff}
         .date-active-badge{background:#fbbf24;color:#78350f;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:10px;display:none}
         .date-active-badge.visible{display:inline-block}
+        .preset-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:.28rem .6rem;border-radius:6px;font-size:.7rem;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap}
+        .preset-btn:hover{background:rgba(255,255,255,.18);color:#fff}
+        .preset-btn.active{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.45);color:#fff;font-weight:600}
+        .preset-sep{width:1px;height:18px;background:rgba(255,255,255,.15);flex-shrink:0}
 
         @media(max-width:640px){
             .header-top{padding:1.25rem 1rem .5rem;flex-direction:column;gap:.5rem}
@@ -103,6 +108,14 @@
             .stats-bar,.container{padding:0 1rem}
             .news-item{padding:.75rem .85rem}.news-title{font-size:.85rem}
             .date-label{top:165px}
+=======
+        @media(max-width:640px){
+            .header-top{padding:1.25rem 1rem .5rem;flex-direction:column;gap:.5rem}
+            .header h1{font-size:1.3rem}.filter-bar{padding:.6rem 1rem .75rem}
+            .stats-bar,.container{padding:0 1rem}
+            .news-item{padding:.75rem .85rem}.news-title{font-size:.85rem}
+            .date-label{top:145px}
+>>>>>>> origin/main
         }
     </style>
 </head>
@@ -122,14 +135,21 @@
         </div>
     </div>
     <div class="filter-bar" id="filter-bar"></div>
+<<<<<<< HEAD
     <div class="date-range-bar">
         <label>&#128197; Periodo:</label>
+        <button class="preset-btn" data-days="7">7 giorni</button>
+        <button class="preset-btn" data-days="30">30 giorni</button>
+        <button class="preset-btn" data-days="90">90 giorni</button>
+        <div class="preset-sep"></div>
         <input type="date" class="date-input" id="date-from" title="Da">
         <span class="date-sep">→</span>
         <input type="date" class="date-input" id="date-to" title="A">
         <button class="date-reset" id="date-reset">&#10005; Reset</button>
         <span class="date-active-badge" id="date-badge">Filtro attivo</span>
     </div>
+=======
+>>>>>>> origin/main
 </header>
 
 <div class="stats-bar">
@@ -168,6 +188,7 @@ const TC = {
     dora:  {label:"DORA",           dot:"#7c3aed"},
     nis2:  {label:"NIS2",           dot:"#dc2626"},
     aiact: {label:"AI Act",         dot:"#16a34a"},
+<<<<<<< HEAD
 };
 const FO = ["all","bdi","ecb","eba","esma","dora","nis2","aiact"];
 
@@ -287,15 +308,145 @@ function renderNews(){
 document.getElementById("refresh-btn").onclick=doRefresh;
 
 // Date range inputs
-document.getElementById("date-from").oninput=e=>{dateFrom=e.target.value;renderNews()};
-document.getElementById("date-to").oninput=e=>{dateTo=e.target.value;renderNews()};
+document.getElementById("date-from").oninput=e=>{dateFrom=e.target.value;activePreset=0;updatePresets();renderNews()};
+document.getElementById("date-to").oninput=e=>{dateTo=e.target.value;activePreset=0;updatePresets();renderNews()};
 document.getElementById("date-reset").onclick=()=>{
-    dateFrom=""; dateTo="";
+    dateFrom=""; dateTo=""; activePreset=0;
     document.getElementById("date-from").value="";
     document.getElementById("date-to").value="";
-    renderNews();
+    updatePresets(); renderNews();
+=======
+>>>>>>> origin/main
 };
+const FO = ["all","bdi","ecb","eba","esma","dora","nis2","aiact"];
 
+<<<<<<< HEAD
+// Preset rapidi (7g, 30g, 90g)
+let activePreset=0;
+function pad2(n){return String(n).padStart(2,"0")}
+function toISO(d){return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate())}
+
+function updatePresets(){
+    document.querySelectorAll(".preset-btn").forEach(b=>{
+        b.classList.toggle("active", parseInt(b.dataset.days)===activePreset);
+    });
+}
+
+document.querySelectorAll(".preset-btn").forEach(btn=>{
+    btn.onclick=()=>{
+        const days=parseInt(btn.dataset.days);
+        if(activePreset===days){
+            // Click di nuovo = disattiva
+            dateFrom=""; dateTo=""; activePreset=0;
+            document.getElementById("date-from").value="";
+            document.getElementById("date-to").value="";
+        } else {
+            const today=new Date();
+            const from=new Date(today);
+            from.setDate(from.getDate()-days);
+            dateFrom=toISO(from); dateTo=toISO(today);
+            document.getElementById("date-from").value=dateFrom;
+            document.getElementById("date-to").value=dateTo;
+            activePreset=days;
+        }
+        updatePresets(); renderNews();
+    };
+});
+
+=======
+let items = [], filter = "all", counts = {}, knownIds = new Set();
+
+function fmtDate(s){const d=new Date(s+"T12:00:00");return `${DI[d.getDay()]} ${d.getDate()} ${MI[d.getMonth()]} ${d.getFullYear()}`}
+function isToday(s){const t=new Date(),d=new Date(s+"T12:00:00");return d.getDate()===t.getDate()&&d.getMonth()===t.getMonth()&&d.getFullYear()===t.getFullYear()}
+function esc(s){if(!s)return"";const m={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"};return s.replace(/[&<>"']/g,c=>m[c])}
+function ago(iso){if(!iso)return"";const m=Math.floor((Date.now()-new Date(iso).getTime())/6e4);if(m<1)return"Appena aggiornato";if(m<60)return m+" min fa";const h=Math.floor(m/60);if(h<24)return h+"h fa";return Math.floor(h/24)+"g fa"}
+
+async function load(){
+    try{
+        const r=await fetch(API+"/api/news");
+        if(!r.ok)throw new Error(r.status);
+        const d=await r.json();
+        const prev=new Set(knownIds);
+        items=d.items||[];
+        knownIds=new Set(items.map(i=>i.id));
+
+        // Detect new items
+        items.forEach(i=>{i._isNew=prev.size>0&&!prev.has(i.id)});
+
+        document.getElementById("last-updated").textContent="Agg. "+ago(d.last_updated);
+
+        if(d.date_range){
+            const s=new Date(d.date_range.start+"T12:00:00");
+            const e=new Date(d.date_range.end+"T12:00:00");
+            document.getElementById("range-badge").textContent=
+                `${s.getDate()} ${MI[s.getMonth()]} ${s.getFullYear()} → ${e.getDate()} ${MI[e.getMonth()]} ${e.getFullYear()}`;
+        }
+
+        counts={all:items.length};
+        items.forEach(i=>(i.tags||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
+        renderFilters();renderNews();
+    }catch(e){
+        console.error("Load failed:",e);
+        document.getElementById("loading").innerHTML='<div class="empty-state"><p>Errore nel caricamento. Verifica che il server sia attivo.</p></div>';
+    }
+}
+
+async function doRefresh(){
+    const b=document.getElementById("refresh-btn");
+    b.classList.add("loading");
+    try{const r=await fetch(API+"/api/refresh",{method:"POST"});if(r.ok)await load()}
+    catch(e){console.error(e)}
+    finally{b.classList.remove("loading")}
+}
+
+function renderFilters(){
+    const bar=document.getElementById("filter-bar");
+    bar.innerHTML=FO.map(f=>{
+        const l=f==="all"?"Tutte":TC[f]?.label||f;
+        const c=counts[f]||0;
+        return `<button class="filter-btn ${f===filter?"active":""}" data-f="${f}">${l}<span class="ct">${c}</span></button>`;
+    }).join("");
+    bar.querySelectorAll(".filter-btn").forEach(b=>b.onclick=()=>{filter=b.dataset.f;renderFilters();renderNews()});
+}
+
+function renderNews(){
+    const c=document.getElementById("news-container");
+    document.getElementById("count").textContent=0;
+    const fl=filter==="all"?items:items.filter(i=>i.tags?.includes(filter));
+    document.getElementById("count").textContent=fl.length;
+
+    if(!fl.length){c.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg><p>Nessuna pubblicazione per questo filtro.</p></div>';return}
+
+    const g={};fl.forEach(i=>{const d=i.date||"N/D";(g[d]=g[d]||[]).push(i)});
+    const dates=Object.keys(g).sort((a,b)=>b.localeCompare(a));
+
+    let h="";
+    dates.forEach(d=>{
+        const today=isToday(d)?'<span class="today">OGGI</span>':"";
+        const label=d==="N/D"?d:fmtDate(d);
+        h+=`<div class="date-group"><div class="date-label">${label}${today}</div>`;
+        g[d].forEach(i=>{
+            const pt=i.source||i.tags?.[0]||"bdi";
+            const dc=TC[pt]?.dot||"#6b7280";
+            const tags=(i.tags||[]).map(t=>`<span class="tag tag-${t}">${TC[t]?.label||t}</span>`).join("");
+            const newCls=i._isNew?" is-new":"";
+            h+=`<div class="news-item${newCls}" onclick="this.classList.toggle('expanded')">
+                <div class="dot" style="background:${dc}"></div>
+                <div class="news-body">
+                    <div class="news-title">${esc(i.title)}</div>
+                    ${i.summary?`<div class="news-summary">${esc(i.summary)}</div>`:""}
+                    <div class="news-meta">${tags}</div>
+                </div>
+                <a class="news-link" href="${esc(i.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Apri fonte">&#8599;</a>
+            </div>`;
+        });
+        h+="</div>";
+    });
+    c.innerHTML=h;
+}
+
+document.getElementById("refresh-btn").onclick=doRefresh;
+>>>>>>> origin/main
 load();
 setInterval(load, POLL_MS);
 </script>
