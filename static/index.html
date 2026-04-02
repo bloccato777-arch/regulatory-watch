@@ -91,6 +91,12 @@
         /* New items highlight */
         .news-item.is-new{border-left:3px solid #34d399}
 
+        /* Search bar */
+        .search-bar{max-width:900px;margin:0 auto;padding:.5rem 1.5rem .6rem;display:flex;align-items:center}
+        .search-input{flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:.3rem .6rem;border-radius:6px;font-size:.72rem;font-family:inherit;outline:none;transition:all .15s}
+        .search-input::placeholder{color:rgba(255,255,255,.4)}
+        .search-input:focus{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.45)}
+
         /* Skeleton */
         .skeleton{background:linear-gradient(90deg,#eee 25%,#f5f5f5 50%,#eee 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
         @keyframes shimmer{to{background-position:-200% 0}}
@@ -127,6 +133,9 @@
         </div>
     </div>
     <div class="filter-bar" id="filter-bar"></div>
+    <div class="search-bar">
+        <input type="text" class="search-input" id="search-input" placeholder="🔍 Cerca notizie..." title="Cerca per titolo o contenuto">
+    </div>
     <div class="date-range-bar">
         <label>📅 Periodo:</label>
         <button class="preset-btn" data-preset="7">Ultimi 7 giorni</button>
@@ -179,7 +188,7 @@ const TC = {
     aiact: {label:"AI Act",         dot:"#16a34a"},
 };
 const FO = ["all","bdi","ecb","eba","esma","dora","nis2","aiact"];
-
+let searchText = "";
 let items = [], filter = "all", counts = {}, knownIds = new Set();
 let dateFrom = "", dateTo = "";
 
@@ -248,6 +257,11 @@ function renderNews(){
     const c=document.getElementById("news-container");
     document.getElementById("count").textContent=0;
     let fl=filter==="all"?items:items.filter(i=>i.tags?.includes(filter));
+        // Applica il filtro di ricerca
+        if(searchText.trim()){
+            const search=searchText.toLowerCase();
+            fl=fl.filter(i=>(i.title?.toLowerCase().includes(search)||i.summary?.toLowerCase().includes(search)));
+        }
     fl=fl.filter(i=>isInDateRange(i.date));
     document.getElementById("count").textContent=fl.length;
 
@@ -301,6 +315,7 @@ function setPreset(days){
     renderNews();
 }
 
+document.getElementById("search-input").oninput=()=>{searchText=document.getElementById("search-input").value;renderNews()};
 document.getElementById("refresh-btn").onclick=doRefresh;
 document.getElementById("date-from").oninput=()=>{dateFrom=document.getElementById("date-from").value;updateDateBadge();renderNews()};
 document.getElementById("date-to").oninput=()=>{dateTo=document.getElementById("date-to").value;updateDateBadge();renderNews()};

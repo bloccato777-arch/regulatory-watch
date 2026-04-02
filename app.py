@@ -193,6 +193,49 @@ SOURCES = [
         "url": "https://www.consilium.europa.eu/en/press/press-releases/?filters=2036&filters=2175",
         "tags": ["aiact", "nis2", "dora"],
     },
+    # ---- Reuters / MarketWatch / Financial News ----
+    {
+        "id": "reuters_finance",
+        "label": "Reuters",
+        "type": "rss",
+        "url": "https://feeds.reuters.com/finance/financialservices",
+        "tags": ["bdi", "ecb"],
+    },
+    {
+        "id": "marketwatch",
+        "label": "MarketWatch",
+        "type": "rss",
+        "url": "https://feeds.marketwatch.com/marketwatch/topstories",
+        "tags": ["ecb"],
+    },
+    {
+        "id": "ft_finance",
+        "label": "Financial Times",
+        "type": "rss",
+        "url": "https://feeds.ft.com/ftcms/rss/home",
+        "tags": ["ecb", "eba"],
+    },
+    {
+        "id": "politico_eu",
+        "label": "Politico EU",
+        "type": "rss",
+        "url": "https://www.politico.eu/feed/",
+        "tags": ["aiact", "dora", "nis2"],
+    },
+    {
+        "id": "compliance_ai",
+        "label": "Compliance News",
+        "type": "rss",
+        "url": "https://www.compliancesearch.com/rss/",
+        "tags": ["dora", "nis2", "aiact"],
+    },
+    {
+        "id": "fintech_mag",
+        "label": "Fintech Magazine",
+        "type": "rss",
+        "url": "https://www.fintechmagazine.com/feed/rss.xml",
+        "tags": ["aiact", "dora"],
+    },
 ]
 
 # Keywords for auto-tagging
