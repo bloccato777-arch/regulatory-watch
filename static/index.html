@@ -213,7 +213,18 @@ async function load(){
         }
         counts={all:items.length};
         items.forEach(i=>(i.tags||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
-        renderFilters();renderNews();
+        
+        // Reset TOTALE: svuota gli input date e resetta i filtri
+        dateFrom="";
+        dateTo="";
+        document.getElementById("date-from").value="";
+        document.getElementById("date-to").value="";
+        document.getElementById("date-badge").classList.remove("show");
+        document.querySelectorAll(".preset-btn").forEach(b=>b.classList.remove("active"));
+        
+        // Renderizza TUTTO (sia filtri fonte che date)
+        renderFilters();
+        renderNews();
     }catch(e){
         console.error("Load failed:",e);
         document.getElementById("loading").innerHTML='<div class="empty-state"><p>Errore nel caricamento. Verifica che il server sia attivo.</p></div>';
