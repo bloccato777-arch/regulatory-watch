@@ -21,7 +21,9 @@ import requests
 from bs4 import BeautifulSoup
 from flask import Flask, jsonify, send_from_directory, request
 from apscheduler.schedulers.background import BackgroundScheduler
-
+# API Keys
+GOOGLE_NEWS_API_KEY = os.getenv("GOOGLE_NEWS_API_KEY")
+TWITTER_BEARER_TOKEN = os.getenv("TWITTER_BEARER_TOKEN")
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
@@ -235,6 +237,43 @@ SOURCES = [
         "type": "rss",
         "url": "https://www.fintechmagazine.com/feed/rss.xml",
         "tags": ["aiact", "dora"],
+    },
+    # ---- Social Media - Google News ----
+    {
+        "id": "google_news_banking",
+        "label": "Google News - Finanza",
+        "type": "google_news",
+        "keywords": "banca ECB supervisione regulazione",
+        "tags": ["ecb", "bdi"],
+    },
+    {
+        "id": "google_news_regulation",
+        "label": "Google News - Regulazione",
+        "type": "google_news",
+        "keywords": "DORA NIS2 AI Act cybersecurity",
+        "tags": ["dora", "nis2", "aiact"],
+    },
+    # ---- Social Media - Twitter/X ----
+    {
+        "id": "twitter_ecb",
+        "label": "Twitter - ECB",
+        "type": "twitter",
+        "accounts": ["ecb", "bankingsupervision"],
+        "tags": ["ecb"],
+    },
+    {
+        "id": "twitter_eba",
+        "label": "Twitter - EBA",
+        "type": "twitter",
+        "accounts": ["eba_bcreg"],
+        "tags": ["eba"],
+    },
+    {
+        "id": "twitter_esma",
+        "label": "Twitter - ESMA",
+        "type": "twitter",
+        "accounts": ["ESMA_EBA_EIOPA"],
+        "tags": ["esma"],
     },
 ]
 
@@ -473,6 +512,106 @@ def fetch_scrape(source: dict) -> list[dict]:
         log.warning(f"SCRAPE [{source['id']}] failed: {e}")
     return items
 
+def fetch_google_news(source: dict) -> list[dict]:
+    """Fetch news from Google News API."""
+    items = []
+    if not GOOGLE_NEWS_API_KEY:
+        log.warning("GOOGLE_NEWS_API_KEY not set")
+        return items
+    
+    try:
+        url = "https://newsapi.org/v2/everything"
+        params = {
+            "q": source["keywords"],
+            "sortBy": "publishedAt",
+            "language": "en",
+            "apiKey": GOOGLE_NEWS_API_KEY,
+        }
+        resp = requests.get(url, params=params, headers=HEADERS, timeout=15)
+        resp.raise_for_status()
+        data = resp.json()
+        
+        for article in data.get("articles", []):
+            date = parse_date(article.get("publishedAt"))
+            if not is_in_range(date):
+                continue
+            
+            title = article.get("title", "").strip()
+            url_article = article.get("url", "").strip()
+            summary = article.get("description", "")[:300]
+            tags = list(source["tags"]) + detect_extra_tags(title, summary)
+            
+            items.append({
+                "id": make_id(title, url_article),
+                "date": date,
+                "title": title,
+                "summary": summary,
+                "source": source["tags"][0],
+                "sourceLabel": source["label"],
+                "tags": list(set(tags)),
+                "url": url_article,
+            })
+        
+        log.info(f"GOOGLE_NEWS [{source['id']}] → {len(items)} items")
+    except Exception as e:
+        log.warning(f"GOOGLE_NEWS [{source['id']}] failed: {e}")
+    
+    return items
+
+
+def fetch_twitter(source: dict) -> list[dict]:
+    """Fetch tweets from Twitter/X API v2."""
+    items = []
+    if not TWITTER_BEARER_TOKEN:
+        log.warning("TWITTER_BEARER_TOKEN not set")
+        return items
+    
+    try:
+        headers = {"Authorization": f"Bearer {TWITTER_BEARER_TOKEN}"}
+        
+        for account in source.get("accounts", []):
+            url = "https://api.twitter.com/2/tweets/search/recent"
+            params = {
+                "query": f"from:{account} -is:retweet",
+                "max_results": 50,
+                "tweet.fields": "created_at,author_id",
+                "expansions": "author_id",
+                "user.fields": "username",
+            }
+            
+            resp = requests.get(url, params=params, headers=headers, timeout=15)
+            resp.raise_for_status()
+            data = resp.json()
+            
+            for tweet in data.get("data", []):
+                date = parse_date(tweet.get("created_at"))
+                if not is_in_range(date):
+                    continue
+                
+                title = tweet.get("text", "").strip()[:150]
+                if len(title) < 20:
+                    continue
+                
+                url_tweet = f"https://twitter.com/{account}/status/{tweet['id']}"
+                tags = list(source["tags"]) + detect_extra_tags(title)
+                
+                items.append({
+                    "id": make_id(title, url_tweet),
+                    "date": date,
+                    "title": f"[{account.upper()}] {title}",
+                    "summary": "",
+                    "source": source["tags"][0],
+                    "sourceLabel": source["label"],
+                    "tags": list(set(tags)),
+                    "url": url_tweet,
+                })
+        
+        log.info(f"TWITTER [{source['id']}] → {len(items)} items")
+    except Exception as e:
+        log.warning(f"TWITTER [{source['id']}] failed: {e}")
+    
+    return items
+
 
 # ---------------------------------------------------------------------------
 # Main fetch orchestrator
@@ -486,6 +625,10 @@ def fetch_all() -> list[dict]:
                 all_items.extend(fetch_rss(src))
             elif src["type"] == "scrape":
                 all_items.extend(fetch_scrape(src))
+            elif src["type"] == "google_news":
+                all_items.extend(fetch_google_news(src))
+            elif src["type"] == "twitter":
+                all_items.extend(fetch_twitter(src))
         except Exception as e:
             log.error(f"Source [{src['id']}] error: {e}")
 
